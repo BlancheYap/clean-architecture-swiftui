@@ -17,8 +17,7 @@ steps:
     displayName: Install Dependencies
     inputs:
       script: >
-        cd Detox
-        yarn install
+        cd Detox && yarn install
 
   - task: Cache@2
     inputs:
