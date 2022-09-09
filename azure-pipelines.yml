@@ -36,10 +36,10 @@ steps:
   #     yarn type-check
   #   displayName: 'Codegen and type-check'
 
-  # - task: CocoaPods@0
-  #   inputs:
-  #     workingDirectory: 'ios'
-  #     forceRepoUpdate: false
+  - task: CocoaPods@0
+    inputs:
+      workingDirectory: 'Detox'
+      forceRepoUpdate: false
 
   - script: |
       brew tap wix/brew
