@@ -20,7 +20,7 @@ describe('SwiftUI with Detox Demo', ()=> {
         await element(by.type('UISearchBarTextField')).tap();
         await element(by.type('UISearchBarTextField')).replaceText('Afghanistan');
 
-        await waitFor(element(by.type('UITableViewWrapperView')
+        await waitFor(element(by.type('SwiftUI.ListTableViewCell')
             .withDescendant(by.label('Afghanistan, Population 40,218,234')))).toBeVisible().withTimeout(6000);
         await element(by.type('SwiftUI.ListTableViewCell')
             .withDescendant(by.label('Afghanistan, Population 40,218,234'))).tap();
