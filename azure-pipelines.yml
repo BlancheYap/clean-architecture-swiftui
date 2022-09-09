@@ -3,10 +3,10 @@ variables:
   value: Detox
 - name: BuildParameters.searchFolder
   value: $(System.DefaultWorkingDirectory)
- trigger:
+trigger:
   branches:
     include:
-    - refs/heads/detox
+      - refs/heads/detox
 resources:
   repositories:
   - repository: self
