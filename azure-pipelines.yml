@@ -12,6 +12,13 @@ steps:
     inputs:
       versionSpec: '16.17.0'
     displayName: 'Install Node'
+  
+  - task: CmdLine@2
+    displayName: Build
+    inputs:
+      script: >
+        cd Detox
+        yarn install
 
   - task: Cache@2
     inputs:
