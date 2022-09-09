@@ -5,6 +5,7 @@
   "testTimeout": 120000,
   "testRegex": "\\.e2e\\.js$",
   "reporters": [
+    "jest-junit",
     "detox/runners/jest/streamlineReporter",
     ["jest-html-reporters", {
       "publicPath": "./report",
