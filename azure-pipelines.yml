@@ -1,55 +1,70 @@
-trigger:
-  - none
-
-pool:
-  vmImage: 'macos-latest'
-
 variables:
-  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
-
-steps:
+- name: BuildParameters.workingDirectory
+  value: Detox
+- name: BuildParameters.searchFolder
+  value: $(System.DefaultWorkingDirectory)
+ trigger:
+  branches:
+    include:
+    - refs/heads/detox
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/detox
+jobs:
+- job: Detox_iOS_Test
+  displayName: Detox iOS Test
+  pool:
+    vmImage: macos-latest
+  steps:
+  - checkout: self
+    clean: true
+    fetchTags: false
   - task: NodeTool@0
+    displayName: INSTALL NODE
     inputs:
-      versionSpec: '16.17.0'
-    displayName: 'Install Node'
-  
+      versionSpec: 16.x
+  - task: YarnInstaller@3
+    displayName: INSTALL YARN
   - task: CmdLine@2
-    displayName: Install Dependencies
+    displayName: INSTALL_brew_And_applesimutils
     inputs:
       script: >
-        cd Detox && yarn install
-
-  # - task: Cache@2
-  #   inputs:
-  #     key: 'yarn | "$(Agent.OS)" | yarn.lock'
-  #     restoreKeys: |
-  #       yarn | "$(Agent.OS)"
-  #       yarn
-  #     path: $(YARN_CACHE_FOLDER)
-  #   displayName: 'Cache Yarn packages'
-
-  # - script: yarn --frozen-lockfile
-  #   displayName: 'Install dependencies'
-
-  # - script: |
-  #     yarn codegen
-  #     yarn type-check
-  #   displayName: 'Codegen and type-check'
-
-  - task: CocoaPods@0
+        brew tap wix/brew
+        brew install applesimutils
+  - task: Npm@1
+    displayName: NPM INSTALL
     inputs:
-      workingDirectory: 'Detox'
-      forceRepoUpdate: false
-
-  - script: |
-      brew tap wix/brew
-      brew install applesimutils
-    displayName: 'Install Detox Tools'
-
-  - script: |
-      yarn detox:build:demo
-    displayName: 'Build detox project'
-
-  - script: |
-      yarn detox:test
-    displayName: 'run Detox test'
+      workingDir: $(BuildParameters.workingDirectory)
+      verbose: false
+  - task: CmdLine@2
+    displayName: INSTALL_DEPENDENCIES
+    continueOnError: True
+    enabled: False
+    inputs:
+      script: >
+        pwd
+        echo $(BuildParameters.workingDirectory)
+        npm i
+      workingDirectory: $(BuildParameters.workingDirectory)
+  - task: CmdLine@2
+    displayName: DETOX_BUILD
+    inputs:
+      script: >
+        yarn detox:build:demo
+      workingDirectory: $(BuildParameters.workingDirectory)
+  - task: CmdLine@2
+    displayName: DETOX_TEST
+    inputs:
+      script: >
+        yarn detox:test:demo
+        ls -la
+      workingDirectory: $(BuildParameters.workingDirectory)
+    condition: succeededOrFailed()
+  - task: PublishTestResults@2
+    displayName: PUBLISH_XML_TEST_RESULT
+    inputs:
+      testResultsFiles: '**/junit.xml'
+    condition: succeededOrFailed()
+...
