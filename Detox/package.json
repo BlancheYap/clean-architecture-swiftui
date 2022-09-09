@@ -1,0 +1,28 @@
+{
+  "name": "react-native-with-detox",
+  "version": "1.0.0",
+  "scripts": {
+    "detox:build:demo": " detox build --configuration ios.sim.e2e -l verbose",
+    "detox:test:demo": " detox test --configuration ios.sim.e2e -l verbose --loglevel trace --record-logs all"
+  },
+  "dependencies": {
+    "detox": "^19.10.0",
+    "detox-expo-helpers": "^0.6.0",
+    "expo-detox-hook": "^1.0.10",
+    "jest": "^28.1.3"
+  },
+  "devDependencies": {
+    "jest-html-reporters": "^3.0.10"
+  },
+  "detox": {
+    "test-runner": "jest",
+    "configurations": {
+      "ios.sim.e2e": {
+        "binaryPath": "../build/Build/Products/Debug-iphonesimulator/CountriesSwiftUI.app",
+        "build": "cd .. && xcodebuild -project CountriesSwiftUI.xcodeproj -scheme CountriesSwiftUI -sdk iphonesimulator -derivedDataPath build",
+        "type": "ios.simulator",
+        "name": "iPhone 13 Pro Max"
+      }
+    }
+  }
+}
