@@ -32,6 +32,7 @@ jobs:
     inputs:
       script: >
         brew tap wix/brew
+
         brew install applesimutils
   - task: Npm@1
     displayName: NPM INSTALL
@@ -45,7 +46,9 @@ jobs:
     inputs:
       script: >
         pwd
+
         echo $(BuildParameters.workingDirectory)
+
         npm i
       workingDirectory: $(BuildParameters.workingDirectory)
   - task: CmdLine@2
@@ -59,7 +62,6 @@ jobs:
     inputs:
       script: >
         yarn detox:test:demo
-        ls -la
       workingDirectory: $(BuildParameters.workingDirectory)
     condition: succeededOrFailed()
   - task: PublishTestResults@2
