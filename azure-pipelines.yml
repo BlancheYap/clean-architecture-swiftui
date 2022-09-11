@@ -68,5 +68,6 @@ jobs:
     displayName: PUBLISH_XML_TEST_RESULT
     inputs:
       testResultsFiles: '**/junit.xml'
+      failTaskOnFailedTests: true
     condition: succeededOrFailed()
 ...
