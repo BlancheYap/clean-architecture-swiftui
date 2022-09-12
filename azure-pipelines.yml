@@ -22,11 +22,11 @@ jobs:
     clean: true
     fetchTags: false
   - task: NodeTool@0
-    displayName: INSTALL NODE
+    displayName: INSTALL_NODE
     inputs:
       versionSpec: 16.x
   - task: YarnInstaller@3
-    displayName: INSTALL YARN
+    displayName: INSTALL_YARN
   - task: CmdLine@2
     displayName: INSTALL_brew_And_applesimutils
     inputs:
@@ -35,22 +35,10 @@ jobs:
 
         brew install applesimutils
   - task: Npm@1
-    displayName: NPM INSTALL
+    displayName: INSTALL_DEPENDENCIES
     inputs:
       workingDir: $(BuildParameters.workingDirectory)
       verbose: false
-  - task: CmdLine@2
-    displayName: INSTALL_DEPENDENCIES
-    continueOnError: True
-    enabled: False
-    inputs:
-      script: >
-        pwd
-
-        echo $(BuildParameters.workingDirectory)
-
-        npm i
-      workingDirectory: $(BuildParameters.workingDirectory)
   - task: CmdLine@2
     displayName: DETOX_BUILD
     inputs:
